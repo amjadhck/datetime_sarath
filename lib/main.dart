@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print
 
+import 'package:dialogue_sarath/map.dart';
+import 'package:dialogue_sarath/overlay.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,32 +18,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: MyHomePage2(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyHomePage2 extends StatefulWidget {
+  const MyHomePage2({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePage2State createState() => _MyHomePage2State();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePage2State extends State<MyHomePage2> {
   ScrollController _controller = ScrollController();
-  int? isSelected;
+  DateTime? isSelected = DateTime.now();
 
   @override
   void initState() {
@@ -60,6 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -68,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: 100,
                 color: Colors.transparent,
                 child: Row(
@@ -97,69 +98,114 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                    Container(
-                        color: Colors.transparent,
-                        height: 80,
-                        width: 360,
-                        child: ListView.builder(
-                            controller: _controller,
-                            itemCount: 30,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    isSelected = index;
-                                  });
-                                },
-                                child: Stack(
-                                  children: [
-                                    Center(
-                                      child: Container(
-                                        height: isSelected == index ? 50 : 40,
-                                        width: isSelected == index ? 50 : 40,
-                                        margin: EdgeInsets.all(5.6),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: isSelected == index
-                                              ? Colors.blue
-                                              : Colors.transparent,
+                    Expanded(
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          color: Colors.transparent,
+                          height: 80,
+                          child: ListView.builder(
+                              controller: _controller,
+                              itemCount: 31,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                final day =
+                                    DateTime.now().add(Duration(days: index));
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSelected = day;
+                                    });
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Center(
+                                        child: Container(
+                                          height: isSelected?.day == day.day &&
+                                                  isSelected?.month ==
+                                                      day.month &&
+                                                  isSelected?.year == day.year
+                                              ? 50
+                                              : 40,
+                                          width: isSelected?.day == day.day &&
+                                                  isSelected?.month ==
+                                                      day.month &&
+                                                  isSelected?.year == day.year
+                                              ? 50
+                                              : 40,
+                                          margin: EdgeInsets.all(5.6),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: isSelected?.day == day.day &&
+                                                    isSelected?.month ==
+                                                        day.month &&
+                                                    isSelected?.year == day.year
+                                                ? Colors.blue
+                                                : Colors.transparent,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Positioned(
-                                      top: isSelected == index ? 22 : 27,
-                                      left: isSelected == index ? 20 : 15,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            index.toString(),
-                                            style: TextStyle(
-                                              color: isSelected == index
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontWeight: isSelected == index
-                                                  ? FontWeight.bold
-                                                  : FontWeight.normal,
-                                              fontSize:
-                                                  isSelected == index ? 18 : 15,
+                                      Positioned(
+                                        top: isSelected?.day == day.day &&
+                                                isSelected?.month ==
+                                                    day.month &&
+                                                isSelected?.year == day.year
+                                            ? 22
+                                            : 27,
+                                        left: isSelected?.day == day.day &&
+                                                isSelected?.month ==
+                                                    day.month &&
+                                                isSelected?.year == day.year
+                                            ? 20
+                                            : 15,
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              day.day.toString(),
+                                              style: TextStyle(
+                                                color: isSelected?.day ==
+                                                            day.day &&
+                                                        isSelected?.month ==
+                                                            day.month &&
+                                                        isSelected?.year ==
+                                                            day.year
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                fontWeight: isSelected?.day ==
+                                                            day.day &&
+                                                        isSelected?.month ==
+                                                            day.month &&
+                                                        isSelected?.year ==
+                                                            day.year
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+                                                fontSize: isSelected?.day ==
+                                                            day.day &&
+                                                        isSelected?.month ==
+                                                            day.month &&
+                                                        isSelected?.year ==
+                                                            day.year
+                                                    ? 18
+                                                    : 15,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            "MON",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 10,
+                                            Text(
+                                              DateFormat('EEE')
+                                                  .format(day)
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 10,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            })),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              })),
+                    ),
                     GestureDetector(
                       onTap: _moveForward,
                       child: Stack(
@@ -196,7 +242,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Text("Selected : $isSelected"),
                 ],
-              )
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return Map_Project();
+                    }));
+                  },
+                  child: Text("Map")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (ctx) {
+                      return OverlayContainer();
+                    }));
+                  },
+                  child: Text("tooltip"))
             ],
           ),
         ),
